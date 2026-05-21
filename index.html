@@ -1,0 +1,1413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Infinity Award — AI as Marketing Agency</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+  :root {
+    --bg: #0a0a0a;
+    --surface: #141414;
+    --surface-2: #1e1e1e;
+    --border: #2a2a2a;
+    --text: #f0f0f0;
+    --text-secondary: #999;
+    --accent: #fe2c55;
+    --accent-glow: rgba(254, 44, 85, 0.3);
+    --teal: #25f4ee;
+    --teal-glow: rgba(37, 244, 238, 0.3);
+    --gold: #f5a623;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html {
+    scroll-behavior: smooth;
+    scroll-snap-type: y mandatory;
+  }
+
+  body {
+    font-family: 'Inter', -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    overflow-x: hidden;
+    line-height: 1.6;
+  }
+
+  /* 导航 */
+  nav {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 100;
+    padding: 16px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(10,10,10,0.85);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+    transition: all 0.3s;
+  }
+
+  nav .logo {
+    font-weight: 800;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  nav .logo span { color: var(--accent); }
+
+  nav .nav-links {
+    display: flex;
+    gap: 32px;
+    list-style: none;
+  }
+
+  nav .nav-links a {
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    transition: color 0.2s;
+    position: relative;
+  }
+
+  nav .nav-links a:hover,
+  nav .nav-links a.active {
+    color: var(--text);
+  }
+
+  nav .nav-links a.active::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: var(--accent);
+    border-radius: 1px;
+  }
+
+  .group-tag {
+    background: linear-gradient(135deg, var(--accent), #ff6b81);
+    color: white;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+  }
+
+  /* 通用 Section */
+  section {
+    min-height: 100vh;
+    scroll-snap-align: start;
+    padding: 120px 80px 80px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+  }
+
+  .section-label {
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 16px;
+  }
+
+  h1 {
+    font-size: clamp(42px, 5vw, 72px);
+    font-weight: 900;
+    line-height: 1.1;
+    margin-bottom: 24px;
+  }
+
+  h2 {
+    font-size: clamp(32px, 3.5vw, 48px);
+    font-weight: 800;
+    line-height: 1.2;
+    margin-bottom: 20px;
+  }
+
+  h3 {
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 12px;
+  }
+
+  .subtitle {
+    font-size: 20px;
+    color: var(--text-secondary);
+    max-width: 640px;
+    line-height: 1.7;
+  }
+
+  /* Hero */
+  #hero {
+    text-align: center;
+    align-items: center;
+    background: radial-gradient(ellipse at 50% 0%, rgba(254,44,85,0.12) 0%, transparent 60%),
+                radial-gradient(ellipse at 50% 100%, rgba(37,244,238,0.08) 0%, transparent 50%);
+  }
+
+  #hero h1 span {
+    background: linear-gradient(135deg, var(--accent), var(--teal));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  #hero .subtitle {
+    max-width: 720px;
+    margin: 0 auto 48px;
+  }
+
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 40px;
+    padding: 8px 20px;
+    font-size: 14px;
+    color: var(--text-secondary);
+    margin-bottom: 32px;
+  }
+
+  .hero-badge .trophy { font-size: 18px; }
+
+  .scroll-hint {
+    position: absolute;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    color: var(--text-secondary);
+    font-size: 13px;
+    animation: bounce 2s infinite;
+  }
+
+  .scroll-hint .arrow {
+    width: 24px;
+    height: 24px;
+    border-right: 2px solid var(--text-secondary);
+    border-bottom: 2px solid var(--text-secondary);
+    transform: rotate(45deg);
+  }
+
+  @keyframes bounce {
+    0%, 100% { transform: translateX(-50%) translateY(0); }
+    50% { transform: translateX(-50%) translateY(10px); }
+  }
+
+  /* Challenge */
+  #challenge {
+    background: radial-gradient(ellipse at 0% 50%, rgba(254,44,85,0.06) 0%, transparent 50%);
+  }
+
+  .pain-points {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin-top: 48px;
+    max-width: 1100px;
+  }
+
+  .pain-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 32px;
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .pain-card:hover {
+    border-color: var(--accent);
+    transform: translateY(-4px);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+  }
+
+  .pain-card .icon {
+    font-size: 32px;
+    margin-bottom: 16px;
+  }
+
+  .pain-card h3 { font-size: 18px; font-weight: 700; }
+  .pain-card p { color: var(--text-secondary); font-size: 15px; margin-top: 8px; }
+
+  .challenge-summary {
+    margin-top: 48px;
+    padding: 24px 32px;
+    background: linear-gradient(135deg, rgba(254,44,85,0.1), rgba(254,44,85,0.05));
+    border-left: 3px solid var(--accent);
+    border-radius: 0 12px 12px 0;
+    font-size: 20px;
+    font-weight: 600;
+    max-width: 800px;
+  }
+
+  /* Opportunity / HMW */
+  #opportunity {
+    align-items: center;
+    text-align: center;
+    background: radial-gradient(ellipse at 50% 50%, rgba(37,244,238,0.06) 0%, transparent 50%);
+  }
+
+  .hmw-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 48px 56px;
+    max-width: 800px;
+    margin: 40px auto 48px;
+    font-size: 22px;
+    line-height: 1.7;
+    font-weight: 500;
+    position: relative;
+  }
+
+  .hmw-box::before {
+    content: 'HMW';
+    position: absolute;
+    top: -14px;
+    left: 32px;
+    background: var(--teal);
+    color: var(--bg);
+    padding: 4px 16px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 1px;
+  }
+
+  .hmw-box em {
+    color: var(--teal);
+    font-style: normal;
+    font-weight: 700;
+  }
+
+  .opportunity-outcomes {
+    display: flex;
+    gap: 32px;
+    max-width: 900px;
+    margin-top: 16px;
+  }
+
+  .outcome-item {
+    flex: 1;
+    text-align: center;
+    padding: 24px;
+  }
+
+  .outcome-item .num {
+    font-size: 36px;
+    font-weight: 800;
+    color: var(--teal);
+  }
+
+  .outcome-item p {
+    color: var(--text-secondary);
+    font-size: 15px;
+    margin-top: 8px;
+  }
+
+  /* Proposal */
+  #proposal {
+    min-height: auto;
+    padding-bottom: 40px;
+  }
+
+  .story-block {
+    background: linear-gradient(135deg, var(--surface), var(--surface-2));
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 48px;
+    margin: 40px 0;
+    max-width: 900px;
+    position: relative;
+  }
+
+  .story-block::before {
+    content: 'USER STORY';
+    position: absolute;
+    top: -12px;
+    left: 24px;
+    background: var(--gold);
+    color: var(--bg);
+    padding: 4px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1px;
+  }
+
+  .story-block .persona {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 24px;
+    font-size: 15px;
+    color: var(--text-secondary);
+  }
+
+  .story-block .persona .avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent), var(--gold));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+  }
+
+  .story-timeline {
+    position: relative;
+    padding-left: 28px;
+    border-left: 2px solid var(--border);
+  }
+
+  .story-step {
+    position: relative;
+    padding-bottom: 24px;
+    padding-left: 24px;
+  }
+
+  .story-step::before {
+    content: '';
+    position: absolute;
+    left: -7px;
+    top: 6px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--accent);
+    border: 2px solid var(--bg);
+  }
+
+  .story-step.teal::before { background: var(--teal); }
+  .story-step.gold::before { background: var(--gold); }
+
+  .story-step strong {
+    display: block;
+    font-size: 15px;
+    margin-bottom: 4px;
+  }
+
+  .story-step p {
+    color: var(--text-secondary);
+    font-size: 14px;
+  }
+
+  .story-result {
+    margin-top: 16px;
+    padding: 16px 20px;
+    background: rgba(37,244,238,0.08);
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 16px;
+    color: var(--teal);
+    text-align: center;
+  }
+
+  /* 能力模块 */
+  .modules-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    margin: 40px 0;
+    max-width: 1100px;
+  }
+
+  .module-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 28px;
+    transition: all 0.3s;
+    cursor: default;
+  }
+
+  .module-card:hover {
+    border-color: var(--teal);
+    transform: translateY(-2px);
+    box-shadow: 0 12px 32px rgba(0,0,0,0.3);
+  }
+
+  .module-card .module-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    margin-bottom: 16px;
+  }
+
+  .module-card:nth-child(1) .module-icon { background: rgba(254,44,85,0.15); }
+  .module-card:nth-child(2) .module-icon { background: rgba(37,244,238,0.15); }
+  .module-card:nth-child(3) .module-icon { background: rgba(245,166,35,0.15); }
+  .module-card:nth-child(4) .module-icon { background: rgba(139,92,246,0.15); }
+  .module-card:nth-child(5) .module-icon { background: rgba(34,197,94,0.15); }
+
+  .module-card h3 { font-size: 17px; }
+  .module-card p { color: var(--text-secondary); font-size: 14px; margin-top: 6px; }
+
+  .module-card .diff-tag {
+    display: inline-block;
+    margin-top: 12px;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    background: rgba(37,244,238,0.1);
+    color: var(--teal);
+  }
+
+  .module-card .diff-tag.unique {
+    background: rgba(254,44,85,0.1);
+    color: var(--accent);
+  }
+
+  /* 用户分层 */
+  .user-segments {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin: 40px 0;
+    max-width: 1000px;
+  }
+
+  .segment-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 28px;
+    text-align: center;
+    transition: all 0.3s;
+  }
+
+  .segment-card:hover {
+    border-color: var(--gold);
+    transform: translateY(-2px);
+  }
+
+  .segment-card .seg-icon { font-size: 36px; margin-bottom: 12px; }
+  .segment-card .seg-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--gold);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .segment-card h3 { font-size: 16px; margin-bottom: 8px; }
+  .segment-card p { color: var(--text-secondary); font-size: 14px; }
+
+  /* Why Now */
+  #whynow {
+    background: radial-gradient(ellipse at 100% 0%, rgba(245,166,35,0.06) 0%, transparent 50%);
+  }
+
+  .timing-cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin-top: 48px;
+    max-width: 1100px;
+  }
+
+  .timing-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 32px;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s;
+  }
+
+  .timing-card:hover {
+    border-color: var(--gold);
+    transform: translateY(-4px);
+  }
+
+  .timing-card .signal-tag {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    margin-bottom: 16px;
+  }
+
+  .timing-card:nth-child(1) .signal-tag {
+    background: rgba(254,44,85,0.15);
+    color: var(--accent);
+  }
+
+  .timing-card:nth-child(2) .signal-tag {
+    background: rgba(37,244,238,0.15);
+    color: var(--teal);
+  }
+
+  .timing-card:nth-child(3) .signal-tag {
+    background: rgba(245,166,35,0.15);
+    color: var(--gold);
+  }
+
+  .timing-card p { color: var(--text-secondary); font-size: 15px; margin-top: 10px; }
+
+  .timing-insight {
+    margin-top: 48px;
+    padding: 24px 32px;
+    background: linear-gradient(135deg, rgba(245,166,35,0.1), rgba(245,166,35,0.03));
+    border-left: 3px solid var(--gold);
+    border-radius: 0 12px 12px 0;
+    font-size: 17px;
+    font-weight: 500;
+    max-width: 900px;
+    line-height: 1.7;
+  }
+
+  /* 竞品 */
+  #competitive {
+    align-items: center;
+  }
+
+  .comp-table-wrap {
+    margin-top: 40px;
+    max-width: 1000px;
+    width: 100%;
+    overflow-x: auto;
+  }
+
+  .comp-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 15px;
+  }
+
+  .comp-table th {
+    padding: 16px 20px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--text-secondary);
+    border-bottom: 1px solid var(--border);
+    white-space: nowrap;
+  }
+
+  .comp-table th:nth-child(4) {
+    color: var(--accent);
+    font-size: 15px;
+  }
+
+  .comp-table td {
+    padding: 14px 20px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+
+  .comp-table td:first-child {
+    font-weight: 600;
+    white-space: nowrap;
+    color: var(--text-secondary);
+  }
+
+  .comp-table td:nth-child(4) {
+    background: rgba(254,44,85,0.04);
+  }
+
+  .comp-table tr:last-child td { border-bottom: none; }
+
+  .status-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 2px 8px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 500;
+    white-space: nowrap;
+  }
+
+  .status-chip.yes { background: rgba(34,197,94,0.15); color: #22c55e; }
+  .status-chip.no { background: rgba(239,68,68,0.15); color: #ef4444; }
+  .status-chip.partial { background: rgba(245,166,35,0.15); color: var(--gold); }
+  .status-chip.target { background: rgba(254,44,85,0.15); color: var(--accent); font-weight: 700; }
+  .status-chip.unique { background: rgba(37,244,238,0.15); color: var(--teal); font-weight: 700; }
+
+  .comp-insight {
+    margin-top: 40px;
+    padding: 24px 32px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    max-width: 900px;
+    text-align: center;
+    font-size: 17px;
+    line-height: 1.7;
+  }
+
+  .comp-insight strong { color: var(--teal); }
+
+  /* Goals */
+  #goals {
+    min-height: auto;
+    padding-bottom: 40px;
+  }
+
+  .goals-split {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+    margin-top: 40px;
+    max-width: 1100px;
+  }
+
+  .goal-block {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 36px;
+  }
+
+  .goal-block .block-label {
+    display: inline-block;
+    padding: 4px 14px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    margin-bottom: 20px;
+  }
+
+  .goal-block.short .block-label {
+    background: rgba(254,44,85,0.15);
+    color: var(--accent);
+  }
+
+  .goal-block.long .block-label {
+    background: rgba(37,244,238,0.15);
+    color: var(--teal);
+  }
+
+  .milestone {
+    padding: 16px 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .milestone:last-child { border-bottom: none; }
+
+  .milestone .day-tag {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 4px;
+  }
+
+  .goal-block.long .milestone .day-tag { color: var(--teal); }
+
+  .milestone h4 {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+
+  .milestone p {
+    color: var(--text-secondary);
+    font-size: 14px;
+  }
+
+  .milestone .metric {
+    display: inline-block;
+    margin-top: 8px;
+    padding: 3px 10px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--gold);
+  }
+
+  /* Path Forward */
+  #path {
+    background: radial-gradient(ellipse at 50% 100%, rgba(254,44,85,0.08) 0%, transparent 50%);
+  }
+
+  .support-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    margin: 40px 0;
+    max-width: 900px;
+  }
+
+  .support-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 24px;
+    transition: all 0.3s;
+  }
+
+  .support-card:hover {
+    border-color: var(--border);
+    transform: translateY(-2px);
+  }
+
+  .support-card .team-name {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--teal);
+    margin-bottom: 8px;
+  }
+
+  .support-card p { color: var(--text-secondary); font-size: 14px; }
+
+  .support-card .priority {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 700;
+  }
+
+  .support-card .priority.p0 { background: rgba(254,44,85,0.15); color: var(--accent); }
+  .support-card .priority.p1 { background: rgba(245,166,35,0.15); color: var(--gold); }
+
+  .core-ask {
+    margin-top: 48px;
+    max-width: 900px;
+  }
+
+  .ask-box {
+    background: linear-gradient(135deg, rgba(254,44,85,0.12), rgba(37,244,238,0.08));
+    border: 1px solid var(--accent);
+    border-radius: 20px;
+    padding: 40px 48px;
+    text-align: center;
+  }
+
+  .ask-box .ask-label {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--accent);
+    margin-bottom: 16px;
+  }
+
+  .ask-box h3 {
+    font-size: 22px;
+    line-height: 1.5;
+    margin-bottom: 24px;
+  }
+
+  .ask-details {
+    display: flex;
+    gap: 24px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .ask-detail {
+    background: rgba(255,255,255,0.06);
+    padding: 12px 20px;
+    border-radius: 12px;
+    font-size: 14px;
+    color: var(--text-secondary);
+  }
+
+  .ask-detail strong { color: var(--text); }
+
+  /* Flow diagram */
+  .flow-visual {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    margin: 48px auto 0;
+    max-width: 800px;
+    flex-wrap: wrap;
+  }
+
+  .flow-node {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 18px 28px;
+    text-align: center;
+    min-width: 140px;
+    transition: all 0.3s;
+  }
+
+  .flow-node:hover {
+    transform: translateY(-2px);
+    border-color: var(--teal);
+  }
+
+  .flow-node .flow-icon { font-size: 24px; margin-bottom: 6px; }
+  .flow-node .flow-label { font-size: 13px; font-weight: 600; }
+
+  .flow-arrow {
+    font-size: 24px;
+    color: var(--text-secondary);
+    padding: 0 8px;
+  }
+
+  .flow-node.highlight {
+    border-color: var(--accent);
+    box-shadow: 0 0 30px var(--accent-glow);
+  }
+
+  /* 动画 */
+  .fade-up {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+
+  .fade-up.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .delay-1 { transition-delay: 0.1s; }
+  .delay-2 { transition-delay: 0.2s; }
+  .delay-3 { transition-delay: 0.3s; }
+  .delay-4 { transition-delay: 0.4s; }
+  .delay-5 { transition-delay: 0.5s; }
+
+  /* Footer */
+  footer {
+    text-align: center;
+    padding: 60px 40px;
+    color: var(--text-secondary);
+    font-size: 14px;
+    border-top: 1px solid var(--border);
+  }
+
+  footer .footer-logo {
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--text);
+    margin-bottom: 8px;
+  }
+
+  footer .footer-logo span { color: var(--accent); }
+
+  @media (max-width: 768px) {
+    section { padding: 100px 24px 60px; }
+    .pain-points, .timing-cards, .user-segments { grid-template-columns: 1fr; }
+    .goals-split, .support-grid { grid-template-columns: 1fr; }
+    .opportunity-outcomes { flex-direction: column; }
+    .flow-visual { flex-direction: column; }
+    .flow-arrow { transform: rotate(90deg); }
+    nav .nav-links { display: none; }
+    .comp-table { font-size: 13px; }
+    .ask-details { flex-direction: column; align-items: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="logo">
+    <span>&#9883;</span> Infinity Award
+  </div>
+  <ul class="nav-links">
+    <li><a href="#challenge" class="active">Challenge</a></li>
+    <li><a href="#opportunity">Opportunity</a></li>
+    <li><a href="#proposal">Proposal</a></li>
+    <li><a href="#whynow">Why Now</a></li>
+    <li><a href="#goals">Goals</a></li>
+    <li><a href="#path">Path Forward</a></li>
+  </ul>
+  <div class="group-tag">Group 3</div>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-badge">
+    <span class="trophy">&#127942;</span>
+    Think Tank Solutions &mdash; GMPT 2026
+  </div>
+  <h1 class="fade-up"><span>AI as Marketing Agency</span></h1>
+  <p class="subtitle fade-up delay-1">Goal in, Campaign out.<br>Advertisers say what they want. TikTok's AI + Creator ecosystem does the rest.</p>
+
+  <div class="flow-visual fade-up delay-2">
+    <div class="flow-node">
+      <div class="flow-icon">&#127919;</div>
+      <div class="flow-label">Goal In</div>
+    </div>
+    <div class="flow-arrow">&#10230;</div>
+    <div class="flow-node">
+      <div class="flow-icon">&#129302;</div>
+      <div class="flow-label">AI Agent</div>
+    </div>
+    <div class="flow-arrow">&#10230;</div>
+    <div class="flow-node">
+      <div class="flow-icon">&#127908;</div>
+      <div class="flow-label">Creator Match</div>
+    </div>
+    <div class="flow-arrow">&#10230;</div>
+    <div class="flow-node highlight">
+      <div class="flow-icon">&#128640;</div>
+      <div class="flow-label">Campaign Out</div>
+    </div>
+  </div>
+
+  <div class="scroll-hint">
+    Scroll to explore
+    <div class="arrow"></div>
+  </div>
+</section>
+
+<!-- 1. THE CHALLENGE -->
+<section id="challenge">
+  <div class="section-label fade-up">01 &mdash; The Challenge</div>
+  <h2 class="fade-up">AI is everywhere.<br>Trust is nowhere.</h2>
+  <p class="subtitle fade-up delay-1">Advertisers still manually operate the platform. AI features are scattered, results are opaque, and the value isn't felt.</p>
+
+  <div class="pain-points">
+    <div class="pain-card fade-up delay-1">
+      <div class="icon">&#128300;</div>
+      <h3>AI Scattered</h3>
+      <p>AI capabilities exist in silos &mdash; Smart+, Script Generator, Creative Center &mdash; but no unified experience ties them together for the advertiser.</p>
+    </div>
+    <div class="pain-card fade-up delay-2">
+      <div class="icon">&#128065;</div>
+      <h3>Black Box Problem</h3>
+      <p>Advertisers can't see what AI is doing or why. No transparency means no trust, which means no adoption.</p>
+    </div>
+    <div class="pain-card fade-up delay-3">
+      <div class="icon">&#128279;</div>
+      <h3>Ecosystem Disconnected</h3>
+      <p>TikTok owns Ads + Creators + Shop &mdash; a unique trifecta. But these assets aren't connected by AI. The moat exists but isn't activated.</p>
+    </div>
+  </div>
+
+  <div class="challenge-summary fade-up delay-4">
+    AI is being used. Trust hasn't been built. The platform's unique advantage hasn't been activated.
+  </div>
+</section>
+
+<!-- 2. THE OPPORTUNITY -->
+<section id="opportunity">
+  <div class="section-label fade-up">02 &mdash; The Opportunity</div>
+  <h2 class="fade-up">What if TikTok<br>became your agency?</h2>
+
+  <div class="hmw-box fade-up delay-1">
+    How might we use AI to act as a <em>full-service ads agency</em> for advertisers &mdash; so they only need to say what they want, and TikTok's <em>creator ecosystem</em> does the rest?
+  </div>
+
+  <div class="opportunity-outcomes fade-up delay-2">
+    <div class="outcome-item">
+      <div class="num">5 min</div>
+      <p>SMB launches first campaign without learning the platform</p>
+    </div>
+    <div class="outcome-item">
+      <div class="num">50%</div>
+      <p>Less time for enterprise to set up and manage campaigns</p>
+    </div>
+    <div class="outcome-item">
+      <div class="num">&#8734;</div>
+      <p>Creator ecosystem becomes the moat competitors can't replicate</p>
+    </div>
+  </div>
+</section>
+
+<!-- 3. THE PROPOSAL -->
+<section id="proposal">
+  <div class="section-label fade-up">03 &mdash; The Proposal</div>
+  <h2 class="fade-up">Goal in. Campaign out.</h2>
+  <p class="subtitle fade-up delay-1">One story to show you what this looks like in practice.</p>
+
+  <div class="story-block fade-up delay-2">
+    <div class="persona">
+      <div class="avatar">&#129302;</div>
+      <div>
+        <strong style="color:var(--text); display:block;">A Chinese robot vacuum brand breaking into the US</strong>
+        Great product, zero US brand awareness, no local creator relationships. Small team in Shenzhen. $10,000 budget.
+      </div>
+    </div>
+
+    <div class="story-timeline">
+      <div class="story-step">
+        <strong>Marketing lead types one sentence</strong>
+        <p>"$10K budget, launch robot vacuum in the US, conversion focus." &mdash; that's it. No platform knowledge needed. <strong style="color:var(--teal)">0-to-1, fully automated from here.</strong></p>
+      </div>
+      <div class="story-step teal">
+        <strong>AI catches real-time US trends &amp; generates the plan</strong>
+        <p>AI detects "clean with me" and "smart home setup" are trending on US TikTok this week. Auto-generates a 14-day plan: 60% budget on creator content, 40% in-feed ads, with 3 creative angles &mdash; home tour reveals, before-and-after transformations, pet hair challenges.</p>
+      </div>
+      <div class="story-step gold">
+        <strong>AI matches 10 US home &amp; lifestyle creators</strong>
+        <p>Each ranked by historical GMV, audience-fit score, and predicted ROI. Team picks 6, clicks "Launch." AI generates creator briefs automatically, in English, with product talking points localized for the US audience.</p>
+      </div>
+      <div class="story-step">
+        <strong>AI Remix: creatives evolve in real time</strong>
+        <p>Day 3: one creator's "pet hair challenge" video goes semi-viral. AI <strong style="color:var(--accent)">remixes</strong> the top clip &mdash; swaps hooks, adjusts CTAs, generates variants for different audience segments &mdash; and <strong style="color:var(--accent)">replaces</strong> underperformers. No manual editing, no waiting for China's morning to approve.</p>
+      </div>
+      <div class="story-step teal">
+        <strong>Full-loop automation for 14 days</strong>
+        <p>AI continuously chases trending moments, reallocates budget to top creators, rotates creatives, auto-adjusts bids. Daily brief shows what changed and why. A team of 2 in Shenzhen just ran a full US creator campaign without ever touching the platform.</p>
+      </div>
+    </div>
+
+    <div class="story-result">
+      0 &rarr; 1 Full-Process Automation: "Goal in &rarr; Campaign out." A China-based team runs a US campaign. No local ops. No expertise gap. Just results.
+    </div>
+  </div>
+
+  <h3 class="fade-up" style="margin-top: 48px;">Platform Architecture &mdash; What We Build</h3>
+  <p class="fade-up delay-1" style="color:var(--text-secondary); font-size:16px; max-width:800px; margin-bottom:32px;">An AI orchestration layer on top of existing platform capabilities &mdash; not replacing any team's ownership, but connecting existing building blocks into a unified experience.</p>
+
+  <!-- 架构图 -->
+  <div class="fade-up delay-2" style="background:var(--surface); border:1px solid var(--border); border-radius:20px; padding:40px; max-width:1000px;">
+
+    <!-- 顶层：AI Orchestration -->
+    <div style="text-align:center; margin-bottom:24px;">
+      <div style="display:inline-block; background:linear-gradient(135deg, var(--accent), #ff6b81); padding:14px 48px; border-radius:12px; font-weight:700; font-size:17px;">
+        &#129302; AI Orchestration Layer <span style="font-weight:400; font-size:13px; opacity:0.8;">&mdash; NEW: this proposal</span>
+      </div>
+      <p style="color:var(--text-secondary); font-size:13px; margin-top:8px;">Unified agent that interprets advertiser goals and coordinates all platform modules</p>
+    </div>
+
+    <div style="text-align:center; color:var(--text-secondary); font-size:20px; margin:12px 0;">&#8595; orchestrates &#8595;</div>
+
+    <!-- 中间层：5个平台模块 -->
+    <div style="display:grid; grid-template-columns:repeat(5, 1fr); gap:12px; margin:16px 0;">
+      <div style="background:var(--surface-2); border:1px solid var(--border); border-radius:12px; padding:16px; text-align:center;">
+        <div style="font-size:22px;">&#128203;</div>
+        <div style="font-size:13px; font-weight:700; margin-top:6px;">Brief Agent</div>
+        <div style="font-size:11px; color:var(--text-secondary); margin-top:4px;">Goal &rarr; Plan generation</div>
+        <div style="margin-top:8px;"><span class="diff-tag" style="font-size:11px;">New module</span></div>
+      </div>
+      <div style="background:var(--surface-2); border:1px solid var(--border); border-radius:12px; padding:16px; text-align:center;">
+        <div style="font-size:22px;">&#129309;</div>
+        <div style="font-size:13px; font-weight:700; margin-top:6px;">Creator Match</div>
+        <div style="font-size:11px; color:var(--text-secondary); margin-top:4px;">AI-powered creator &harr; brand matching</div>
+        <div style="margin-top:8px;"><span class="diff-tag unique" style="font-size:11px;">TikTok-only moat</span></div>
+      </div>
+      <div style="background:var(--surface-2); border:1px solid var(--border); border-radius:12px; padding:16px; text-align:center;">
+        <div style="font-size:22px;">&#127912;</div>
+        <div style="font-size:13px; font-weight:700; margin-top:6px;">AI Remix Engine</div>
+        <div style="font-size:11px; color:var(--text-secondary); margin-top:4px;">Trend-aware creative gen &amp; iteration</div>
+        <div style="margin-top:8px;"><span class="diff-tag" style="font-size:11px;">Extends Creative Center</span></div>
+      </div>
+      <div style="background:var(--surface-2); border:1px solid var(--border); border-radius:12px; padding:16px; text-align:center;">
+        <div style="font-size:22px;">&#9881;</div>
+        <div style="font-size:13px; font-weight:700; margin-top:6px;">Auto-Pilot</div>
+        <div style="font-size:11px; color:var(--text-secondary); margin-top:4px;">Bid, schedule, rotate, optimize</div>
+        <div style="margin-top:8px;"><span class="diff-tag" style="font-size:11px;">Upgrades Smart+</span></div>
+      </div>
+      <div style="background:var(--surface-2); border:1px solid var(--border); border-radius:12px; padding:16px; text-align:center;">
+        <div style="font-size:22px;">&#128200;</div>
+        <div style="font-size:13px; font-weight:700; margin-top:6px;">Explainability</div>
+        <div style="font-size:11px; color:var(--text-secondary); margin-top:4px;">Decision rationale &amp; attribution</div>
+        <div style="margin-top:8px;"><span class="diff-tag" style="font-size:11px;">New module</span></div>
+      </div>
+    </div>
+
+    <div style="text-align:center; color:var(--text-secondary); font-size:20px; margin:12px 0;">&#8595; powered by &#8595;</div>
+
+    <!-- 底层：数据和已有基建 -->
+    <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:12px;">
+      <div style="background:rgba(37,244,238,0.06); border:1px solid rgba(37,244,238,0.15); border-radius:12px; padding:14px; text-align:center;">
+        <div style="font-size:12px; font-weight:700; color:var(--teal);">CREATOR TEAM</div>
+        <div style="font-size:12px; color:var(--text-secondary); margin-top:4px;">Creator Marketplace, Affiliate data, Creator performance signals</div>
+      </div>
+      <div style="background:rgba(254,44,85,0.06); border:1px solid rgba(254,44,85,0.15); border-radius:12px; padding:14px; text-align:center;">
+        <div style="font-size:12px; font-weight:700; color:var(--accent);">TTAM</div>
+        <div style="font-size:12px; color:var(--text-secondary); margin-top:4px;">Smart+, Ads Manager, bidding engine, advertiser history</div>
+      </div>
+      <div style="background:rgba(245,166,35,0.06); border:1px solid rgba(245,166,35,0.15); border-radius:12px; padding:14px; text-align:center;">
+        <div style="font-size:12px; font-weight:700; color:var(--gold);">DATA / INFRA</div>
+        <div style="font-size:12px; color:var(--text-secondary); margin-top:4px;">Cross-domain data pipeline, trend signals, GMV attribution, content graph</div>
+      </div>
+    </div>
+
+  </div>
+
+  <h3 class="fade-up" style="margin-top:48px;">Platform Value by User Segment</h3>
+  <div class="user-segments">
+    <div class="segment-card fade-up delay-1">
+      <div class="seg-icon">&#128722;</div>
+      <div class="seg-label">SMB</div>
+      <h3>0 &rarr; 1 Onboarding</h3>
+      <p>Platform goal: reduce campaign creation from 30+ steps to 1 goal input. Lower the entry barrier to unlock long-tail advertiser growth.</p>
+    </div>
+    <div class="segment-card fade-up delay-2">
+      <div class="seg-icon">&#127970;</div>
+      <div class="seg-label">Enterprise</div>
+      <h3>Execution Efficiency</h3>
+      <p>Platform goal: AI co-pilot reduces campaign setup &amp; management cost. Frees AM resources, improves advertiser retention.</p>
+    </div>
+    <div class="segment-card fade-up delay-3">
+      <div class="seg-icon">&#127908;</div>
+      <div class="seg-label">Creator</div>
+      <h3>Supply Activation</h3>
+      <p>Platform goal: increase creator utilization rate through AI matching. More creators get collabs, richer supply drives better campaign performance.</p>
+    </div>
+  </div>
+</section>
+
+<!-- WHY NOW -->
+<section id="whynow">
+  <div class="section-label fade-up">04 &mdash; Why Now</div>
+  <h2 class="fade-up">The window is closing.</h2>
+  <p class="subtitle fade-up delay-1">Three signals converging at the same time. Not too early, not too late.</p>
+
+  <div class="timing-cards">
+    <div class="timing-card fade-up delay-1">
+      <span class="signal-tag">Competitive Urgency</span>
+      <h3>Competitors are accelerating</h3>
+      <p>Meta Advantage+ has end-to-end automation live. Google PMax made AI the default. If TikTok doesn't build differentiated AI ads in 2026, budget allocation habits get locked by competitors.</p>
+    </div>
+    <div class="timing-card fade-up delay-2">
+      <span class="signal-tag">Ecosystem Ready</span>
+      <h3>Creator data hit critical mass</h3>
+      <p>TikTok Shop + Affiliate closed loop is working. Creator performance data, GMV attribution, and content trend signals have reached the critical mass needed for AI matching.</p>
+    </div>
+    <div class="timing-card fade-up delay-3">
+      <span class="signal-tag">Infra Ready</span>
+      <h3>AI building blocks exist</h3>
+      <p>Smart+, Creative Center, Script Generator are all live. What's missing isn't point solutions &mdash; it's a unified AI agent layer that connects them into one experience.</p>
+    </div>
+  </div>
+
+  <div class="timing-insight fade-up delay-4">
+    Competitors can automate <strong>ads &times; bids &times; audiences</strong>.<br>
+    Only TikTok can automate <strong>brands &times; creators &times; content &times; conversions</strong>.<br>
+    This is a structurally higher-dimensional optimization space &mdash; and it has an expiration date.
+  </div>
+</section>
+
+<!-- COMPETITIVE LANDSCAPE -->
+<section id="competitive">
+  <div class="section-label fade-up">05 &mdash; Competitive Landscape</div>
+  <h2 class="fade-up" style="text-align:center;">Where we stand</h2>
+
+  <div class="comp-table-wrap fade-up delay-1">
+    <table class="comp-table">
+      <thead>
+        <tr>
+          <th>Dimension</th>
+          <th>Meta Advantage+</th>
+          <th>Google PMax</th>
+          <th>TikTok AI Marketing Agency</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Creative Auto-Gen</td>
+          <td><span class="status-chip yes">&#10003; Live</span></td>
+          <td><span class="status-chip yes">&#10003; Live</span></td>
+          <td><span class="status-chip yes">&#10003; Can integrate</span></td>
+        </tr>
+        <tr>
+          <td>Bid / Delivery Automation</td>
+          <td><span class="status-chip yes">&#10003; Mature</span></td>
+          <td><span class="status-chip yes">&#10003; Mature</span></td>
+          <td><span class="status-chip partial">&#8635; Smart+ upgrade</span></td>
+        </tr>
+        <tr>
+          <td>Creator Matching</td>
+          <td><span class="status-chip no">&#10007; No creator ecosystem</span></td>
+          <td><span class="status-chip no">&#10007; No creator ecosystem</span></td>
+          <td><span class="status-chip unique">&#9733; Unique moat</span></td>
+        </tr>
+        <tr>
+          <td>Closed-Loop Commerce</td>
+          <td><span class="status-chip partial">&#8226; Limited (Shop nascent)</span></td>
+          <td><span class="status-chip no">&#10007; None</span></td>
+          <td><span class="status-chip yes">&#10003; TikTok Shop mature</span></td>
+        </tr>
+        <tr>
+          <td>Unified AI Agent</td>
+          <td><span class="status-chip partial">&#8226; Scattered features</span></td>
+          <td><span class="status-chip partial">&#8226; PMax = black box</span></td>
+          <td><span class="status-chip target">&#9733; This proposal</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="comp-insight fade-up delay-2">
+    Meta and Google lead in "automated ad delivery." But their AI only optimizes <strong>creative &times; bid &times; audience</strong>.<br>TikTok's AI can optimize <strong>brand &times; creator &times; content &times; conversion</strong> &mdash; a fundamentally different game.
+  </div>
+</section>
+
+<!-- GOALS & MILESTONES -->
+<section id="goals">
+  <div class="section-label fade-up">06 &mdash; Product Roadmap</div>
+  <h2 class="fade-up">From reactive tools<br>to industry infrastructure.</h2>
+  <p class="subtitle fade-up delay-1">Four milestones. Each one unlocks a step-change in platform capability.</p>
+
+  <!-- 四阶段 roadmap -->
+  <div style="display:grid; grid-template-columns:1fr 1fr; gap:24px; margin-top:40px; max-width:1100px;">
+
+    <!-- Day 30 -->
+    <div class="goal-block fade-up delay-1" style="background:var(--surface); border:1px solid var(--border); border-radius:20px; padding:36px;">
+      <div style="display:flex; align-items:center; gap:12px; margin-bottom:20px;">
+        <span style="background:rgba(254,44,85,0.15); color:var(--accent); padding:6px 14px; border-radius:20px; font-size:13px; font-weight:700;">&#128640; DAY 30</span>
+        <span style="color:var(--text-secondary); font-size:13px;">Reactive &rarr; Proactive</span>
+      </div>
+      <h3 style="font-size:18px; margin-bottom:4px;">Predictive AI Copilot</h3>
+      <p style="color:var(--teal); font-size:14px; font-weight:600; margin-bottom:12px;">Trend Forecasting + Pre-emptive Fixes</p>
+      <p style="color:var(--text-secondary); font-size:14px; line-height:1.7; margin-bottom:16px;">The system no longer waits for performance to drop before alerting. It predicts ahead. Example: <em style="color:var(--text);">"System predicts this creative will see CPA increase 20% within 3 days due to audience fatigue. 3 replacement videos auto-generated. One-click to swap?"</em></p>
+      <div style="padding:12px 16px; background:rgba(254,44,85,0.06); border-radius:10px; font-size:13px;">
+        <strong style="color:var(--accent);">Strategic value:</strong> <span style="color:var(--text-secondary);">Shift from reactive to proactive. Eliminate the "black box wasting my money" fear. AI becomes a senior media buyer who's always watching the dashboard.</span>
+      </div>
+    </div>
+
+    <!-- Day 60 -->
+    <div class="goal-block fade-up delay-2" style="background:var(--surface); border:1px solid var(--border); border-radius:20px; padding:36px;">
+      <div style="display:flex; align-items:center; gap:12px; margin-bottom:20px;">
+        <span style="background:rgba(37,244,238,0.15); color:var(--teal); padding:6px 14px; border-radius:20px; font-size:13px; font-weight:700;">&#9889; DAY 60</span>
+        <span style="color:var(--text-secondary); font-size:13px;">Zero-Friction Launch</span>
+      </div>
+      <h3 style="font-size:18px; margin-bottom:4px;">AI Campaign Builder</h3>
+      <p style="color:var(--teal); font-size:14px; font-weight:600; margin-bottom:12px;">Goal + Budget In &rarr; Creative + Audience + Bid Out &rarr; Publish</p>
+      <p style="color:var(--text-secondary); font-size:14px; line-height:1.7; margin-bottom:16px;">Prompt-to-Campaign. Advertiser inputs only goal and budget. System auto-completes creative mix, audience targeting, bid strategy, and publishes &mdash; full workflow compressed from hours to minutes.</p>
+      <div style="padding:12px 16px; background:rgba(37,244,238,0.06); border-radius:10px; font-size:13px;">
+        <strong style="color:var(--teal);">Strategic value:</strong> <span style="color:var(--text-secondary);">Head-to-head with Meta ASC on "Simpler &amp; Faster." Break the constraints of ad groups and plan structures &mdash; let AI optimize globally across the full budget.</span>
+      </div>
+    </div>
+
+    <!-- Day 90 -->
+    <div class="goal-block fade-up delay-3" style="background:var(--surface); border:1px solid var(--border); border-radius:20px; padding:36px;">
+      <div style="display:flex; align-items:center; gap:12px; margin-bottom:20px;">
+        <span style="background:rgba(245,166,35,0.15); color:var(--gold); padding:6px 14px; border-radius:20px; font-size:13px; font-weight:700;">&#127916; DAY 90</span>
+        <span style="color:var(--text-secondary); font-size:13px;">Native Creative Moat</span>
+      </div>
+      <h3 style="font-size:18px; margin-bottom:4px;">Creator-Powered Ads</h3>
+      <p style="color:var(--gold); font-size:14px; font-weight:600; margin-bottom:12px;">TikTok Creator Content (TTC) + AI Integration</p>
+      <p style="color:var(--text-secondary); font-size:14px; line-height:1.7; margin-bottom:16px;">Deep integration of AI generation with the creator ecosystem. System extracts top-performing creator assets (with authorization), applies AI remix &mdash; hook swaps, script generation, localization &mdash; to batch-produce short-video matrices with authentic creator feel.</p>
+      <div style="padding:12px 16px; background:rgba(245,166,35,0.06); border-radius:10px; font-size:13px;">
+        <strong style="color:var(--gold);">Strategic value:</strong> <span style="color:var(--text-secondary);">Delivers "Differently &amp; Creator-led." Solves TikTok's biggest bottleneck: high-quality short video at scale. Real creators + AI efficiency = native feel without the "obviously fake" risk, at a fraction of the cost.</span>
+      </div>
+    </div>
+
+    <!-- Day 360 -->
+    <div class="goal-block fade-up delay-4" style="background:var(--surface); border:1px solid rgba(139,92,246,0.3); border-radius:20px; padding:36px;">
+      <div style="display:flex; align-items:center; gap:12px; margin-bottom:20px;">
+        <span style="background:rgba(139,92,246,0.15); color:#8b5cf6; padding:6px 14px; border-radius:20px; font-size:13px; font-weight:700;">&#127760; DAY 360</span>
+        <span style="color:var(--text-secondary); font-size:13px;">Business Model Evolution</span>
+      </div>
+      <h3 style="font-size:18px; margin-bottom:4px;">AI Agency as Product Mode</h3>
+      <p style="color:#8b5cf6; font-size:14px; font-weight:600; margin-bottom:12px;">Standalone SaaS-grade Solution for Brands, MCNs &amp; Agencies</p>
+      <p style="color:var(--text-secondary); font-size:14px; line-height:1.7; margin-bottom:16px;">Package AI capabilities into a standalone "AI Agency" product tier. Serve not just individual brands, but brand portfolios, MCN networks, and real agencies with cross-account budget allocation, full-portfolio asset management, and global strategy generation.</p>
+      <div style="padding:12px 16px; background:rgba(139,92,246,0.06); border-radius:10px; font-size:13px;">
+        <strong style="color:#8b5cf6;">Strategic value:</strong> <span style="color:var(--text-secondary);">From efficiency tool to industry infrastructure. Turn competitors into partners &mdash; empower agencies with AI (enable, not replace) so they can serve more long-tail clients. Grow the total pie together.</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- 4. THE PATH FORWARD -->
+<section id="path">
+  <div class="section-label fade-up">07 &mdash; The Path Forward</div>
+  <h2 class="fade-up">What we need to start.</h2>
+
+  <div class="support-grid">
+    <div class="support-card fade-up delay-1">
+      <div class="team-name">Product &times; R&D</div>
+      <p>Brief Agent development, Creator matching algorithm, Dynamic Generative Ads integration</p>
+      <span class="priority p0">P0</span>
+    </div>
+    <div class="support-card fade-up delay-2">
+      <div class="team-name">Data / Infra</div>
+      <p>Cross-domain data pipeline: advertiser history &times; creator performance &times; GMV attribution</p>
+      <span class="priority p0">P0</span>
+    </div>
+    <div class="support-card fade-up delay-3">
+      <div class="team-name">Legal / Trust & Safety</div>
+      <p>AI-generated content + creator matching compliance framework. Be an enabler, not a post-launch blocker.</p>
+      <span class="priority p1">P1</span>
+    </div>
+    <div class="support-card fade-up delay-4">
+      <div class="team-name">Thailand Local Team</div>
+      <p>Pilot advertiser recruitment, localization, regulatory compliance, customer education</p>
+      <span class="priority p1">P1</span>
+    </div>
+  </div>
+
+  <div class="core-ask fade-up delay-3">
+    <div class="ask-box">
+      <div class="ask-label">THE ASK</div>
+      <h3>Approve a cross-functional squad in Thailand:<br>90 days to validate "Goal in &rarr; Campaign out"</h3>
+      <div class="ask-details">
+        <div class="ask-detail"><strong>Team:</strong> 2 PM &times; 4 RD &times; 1 Data</div>
+        <div class="ask-detail"><strong>Market:</strong> Thailand pilot</div>
+        <div class="ask-detail"><strong>Timeline:</strong> 90 days</div>
+      </div>
+      <p style="margin-top:24px; color:var(--text-secondary); font-size:14px;">
+        Day 90 decision point: based on pilot data, decide whether to scale to more markets and elevate to platform-level strategy.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">Infinity <span>Award</span></div>
+  <p>Group 3 &mdash; Think Tank Solutions &mdash; GMPT 2026</p>
+</footer>
+
+<script>
+  // 滚动显示动画
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.15 });
+
+  document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+  // 导航高亮
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('nav .nav-links a');
+
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(section => {
+      const top = section.offsetTop - 200;
+      if (window.scrollY >= top) {
+        current = section.getAttribute('id');
+      }
+    });
+
+    navLinks.forEach(link => {
+      link.classList.remove('active');
+      if (link.getAttribute('href') === '#' + current) {
+        link.classList.add('active');
+      }
+    });
+  });
+</script>
+
+</body>
+</html>
